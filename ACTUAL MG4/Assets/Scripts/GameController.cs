@@ -1,36 +1,102 @@
 
+using TMPro;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    [SerializeField] private float _gameSpeed = 1f;
+    public static GameController Instance{ get; private set; }
+    public int Score { get; private set; }
+    public bool GameOver { get; private set; }
+
+    public delegate void ScoreChanged(int newScore);
+    public event ScoreChanged OnScoreChanged;
+
+    public delegate void AudioTrigger(AudioSource audioSource);
+    public event AudioTrigger OnAudioTrigger;
     [SerializeField] private GameObject _pipePrefab;
     [SerializeField] private float _spawnInterval = 1f;
     [SerializeField] private float _heightRange = 0.45f;
+    [SerializeField] private TextMeshProUGUI _scoreText;
     private float _timer;
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
     // Start is called before the first frame update
     void Start()
     {
         SpawnPipe();
     }
-
+    
     // Update is called once per frame
     void Update()
-    {
-        transform.position += Vector3.left * _gameSpeed * Time.deltaTime;
-        
+    {        
         _timer += Time.deltaTime;
-        if (_timer >= _spawnInterval)
+        if (_timer >= _spawnInterval && GameOver != true)
         {
             SpawnPipe();
             _timer = 0f;
         }
     }
+    public void IncScore()
+    {
+        Score += 1;
+        Debug.Log("Score: " + Score);
+        OnScoreChanged?.Invoke(Score);
+    }
+    private void UpdateScoreText(int newScore)
+    {
+        if (_scoreText != null)
+        {
+            _scoreText.text = "Score: " + newScore.ToString();
+        }
+    }
+    void OnEnable()
+    {
+        OnScoreChanged += UpdateScoreText;
+        OnAudioTrigger += PointSound;
+    }
+    void OnDisable()
+    {
+        OnScoreChanged -= UpdateScoreText;
+        OnAudioTrigger -= PointSound;
+    }
+
+    public void GameOverTrigger(GameObject player)
+    {
+        GameOver = true;
+        if (GameOver)
+        {
+            Destroy(player);
+            return;
+        }
+    }
+
     private void SpawnPipe()
     {
-        Vector3 spawnPos = new Vector3(5f, Random.Range(-_heightRange, _heightRange));
-        Instantiate(_pipePrefab, spawnPos, Quaternion.identity);
+        Vector3 spawnPos = new Vector3(0f, Random.Range(-_heightRange, _heightRange));
+        GameObject pipe = Instantiate(_pipePrefab, spawnPos, Quaternion.identity);
 
-        Destroy(_pipePrefab, 10f);
+        Destroy(pipe, 7f);
+    }
+    public void TriggerPointSound(AudioSource audioSource)
+    {
+        OnAudioTrigger?.Invoke(audioSource);
+    }
+    private void PointSound(AudioSource audioSource)
+    {
+        if (audioSource != null)
+        {
+            audioSource.Play();
+        }
     }
 }
+
+
