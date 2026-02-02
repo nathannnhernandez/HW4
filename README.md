@@ -10,3 +10,4 @@ In my code I created a singleton in the GameController, which allows it to be pu
 If you added any other assets, list them here!
 - [Brackey's Platformer Bundle](https://brackeysgames.itch.io/brackeys-platformer-bundle) - sound effects
 - [2D pixel art seagull sprites](https://elthen.itch.io/2d-pixel-art-seagull-sprites) - seagull sprites
+- [Old School Shonen SFX](https://heltonyan.itch.io/retroanimesfx) - sound effects
