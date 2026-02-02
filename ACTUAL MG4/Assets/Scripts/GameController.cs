@@ -62,11 +62,13 @@ public class GameController : MonoBehaviour
     {
         OnScoreChanged += UpdateScoreText;
         OnAudioTrigger += PointSound;
+        OnAudioTrigger += DeathExplosionSound;
     }
     void OnDisable()
     {
         OnScoreChanged -= UpdateScoreText;
         OnAudioTrigger -= PointSound;
+        OnAudioTrigger -= DeathExplosionSound;
     }
 
     public void GameOverTrigger(GameObject player)
@@ -91,6 +93,17 @@ public class GameController : MonoBehaviour
         OnAudioTrigger?.Invoke(audioSource);
     }
     private void PointSound(AudioSource audioSource)
+    {
+        if (audioSource != null)
+        {
+            audioSource.Play();
+        }
+    }
+    public void TriggerDeathExplosionSound(AudioSource audioSource)
+    {
+        OnAudioTrigger?.Invoke(audioSource);
+    }
+    private void DeathExplosionSound(AudioSource audioSource)
     {
         if (audioSource != null)
         {
