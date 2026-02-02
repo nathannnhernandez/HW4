@@ -556,7 +556,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _velocity: 5
-  _pointSound: MAGSpel_Anime
+  _pointSound: {fileID: 0}
 --- !u!212 &763718071
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -706,7 +706,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: dfb259c701ae05a47ad70e0cea806d46, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
